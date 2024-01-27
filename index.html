@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Redirect</title>
+    <script>
+        function redirectToAmazon(amazonLink) {
+            const affiliateId = 'amanmahajan12-20';
+            //working url = https://www.amazon.com/dp/B07W624B8K?tag=amanmahajan12-20;
+             //const iosDeepLink = `amzn://www.amazon.com/dp/{amazonLink}`;
+            const iosDeepLink = `com.amazon.mobile.shopping.web://${amazonLink}`;
+            const defaultLink =  `//${amazonLink}`;
 
+            const test=`https://www.amazon.com/Covers-Silicone-Sleeves-Wraps-Mixed/dp/B0BK1YXZND
+?crid=2HLIESNOU4JPD
+&th=1
+&linkCode=ll1
+&tag=amanmahajan12-20
+&linkId=2c689c70e06f86c5824586836c1f7dfb
+&language=en_US
+&ref_=as_li_ss_tl`;
+            
+            // Check if the device is iOS or Android and open the respective deep link
+            const userAgent = navigator.userAgent.toLowerCase() || navigator.vendor.toLowerCase();
+            if (/android/i.test(userAgent)) {
+                const img = new Image();
+                img.src = iosDeepLink;
+                img.onerror = function () {
+                   //alert(defaultLink);
+                    // Fallback to opening the Amazon link in the browser if the app is not installed
+                    window.location.href = defaultLink;
+                };
+            } else if (/ipad|iphone/.test(userAgent) && !window.MSStream) {  
+                const img = new Image();
+                img.src = iosDeepLink;
+                img.onerror = function () {
+                    //alert(defaultLink);
+                    // Fallback to opening the Amazon link in the browser if the app is not installed
+                    window.location.href = defaultLink;
+                };
+            } else {
+                //alert(defaultLink);
+                window.location.href = defaultLink;
+            }
+        }
+
+        // Extract Amazon link from URL parameters and redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const amazonLink = urlParams.get('amazonLink');
+        if (amazonLink) {
+            redirectToAmazon(amazonLink);
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting to Amazon...</p>
+</body>
+</html>
